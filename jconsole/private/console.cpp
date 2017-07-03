@@ -18,7 +18,10 @@ JCON_NAMESPACE::console::console() {
 
 	this->ContentBuffer.reserve(JCON_BUFFER_SIZE);
 	this->ChildBuffer.reserve(JCON_BUFFER_SIZE);
-	this->SegmentBuffer.reserve(JCON_BUFFER_SIZE);
+
+	// Below is implied in declaration
+	//this->SegmentBuffer.reserve(JCON_BUFFER_SIZE);
+	//this->m_SegmentBuffer = JCON_NAMESPACE::segmentBuffer(JCON_BUFFER_SIZE);
 
 	// Initialize default values
 	defaultValues.Font.loadFromFile(JCON_DEFAULT_FONT);
@@ -94,25 +97,27 @@ void JCON_NAMESPACE::console::StartInsertion() {
 	this->curLineHeight = 0;
 
 	this->setShouldScrollDown( /*this->ScrollBar->AtBottom() or*/ this->getRebuilding());
-	this->SegmentBuffer.clear();
+	this->m_SegmentBuffer.clear();
 }
 
 void JCON_NAMESPACE::console::EndInsertion() {
 
 	int side_x_offset = this->getSideOffset();
 
-	for (JCON_NAMESPACE::segment segment : this->SegmentBuffer) {
+	/*for (JCON_NAMESPACE::segment segment : this->SegmentBuffer) {*/
+
+	this->m_SegmentBuffer.Iterate([=](JCON_NAMESPACE::segment* segment){
 
 		// Paint function
 		this->ChildBuffer.push_back([=](int yOffset){
 
-			sf::Text text(segment.text, segment.font, this->defaultValues.characterSize);
-			text.setFillColor(segment.color);
-			text.setPosition(segment.x + side_x_offset, segment.y + yOffset);
+			sf::Text text(segment->text, segment->font, this->defaultValues.characterSize);
+			text.setFillColor(segment->color);
+			text.setPosition(segment->x + side_x_offset, segment->y + yOffset);
 			this->m_WindowContext->draw(text);
 		});
 
-	}
+	});
 
 }
 
@@ -126,7 +131,8 @@ void JCON_NAMESPACE::console::AppendFont(JCON_NAMESPACE::fontType font) {
 
 void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 	if (text.length() == 0) return;
-
+	
+	/*
 	unsigned int w = this->Extent2D.x;
 	unsigned int h = this->Extent2D.y;
 
@@ -203,7 +209,7 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 		newSegment->text += character;
 
 	}
-	/*
+	*/
 	sf::Text sizeTester( text, this->curFont, this->defaultValues.characterSize);
 	sf::FloatRect characterSize = sizeTester.getLocalBounds();
 
@@ -211,8 +217,8 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 		this->curLineHeight = characterSize.height;
 	}
 
-	JCON_NAMESPACE::segment newSegment = this->newSegment();
-	newSegment.text = text;
+	JCON_NAMESPACE::segment* newSegment = this->newSegment();
+	newSegment->text = text;
 
 	this->curX += characterSize.width;
 
@@ -221,8 +227,8 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 		this->curY += this->curLineHeight;
 	}
 
-	this->SegmentBuffer.push_back(newSegment);
-	*/
+	//this->SegmentBufferpush_back(newSegment);
+	
 }
 
 void JCON_NAMESPACE::console::HandleWindowOnResize(sf::Event* Event) {
@@ -240,8 +246,10 @@ JCON_NAMESPACE::segment* JCON_NAMESPACE::console::newSegment(){
 	newSegment.color = this->curColor;
 	newSegment.lineHeight = this->curLineHeight;
 
-	this->SegmentBuffer.push_back(newSegment);
+	//this->SegmentBuffer.push_back(newSegment);
 
 	//return &this->SegmentBuffer.back();
-	return &(*(this->SegmentBuffer.end()));
+	//return &(*(this->m_SegmentBuffer.end()));
+
+	return this->m_SegmentBuffer.push_back(newSegment);
 }

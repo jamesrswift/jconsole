@@ -21,6 +21,9 @@
     <ClCompile Include="private\console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="private\segment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="public\console.hpp">

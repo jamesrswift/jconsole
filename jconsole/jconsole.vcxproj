@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="private\console.cpp" />
     <ClCompile Include="private\main.cpp" />
+    <ClCompile Include="private\segment.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="public\accessor.h" />

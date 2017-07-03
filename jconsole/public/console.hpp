@@ -30,7 +30,8 @@ namespace JCON_NAMESPACE {
 	private:
 		JCON_NAMESPACE::componentList ContentBuffer;
 		std::vector<std::function<ChildPaintType>> ChildBuffer;
-		std::vector<JCON_NAMESPACE::segment> SegmentBuffer;
+		//std::vector<JCON_NAMESPACE::segment> SegmentBuffer;
+		JCON_NAMESPACE::segmentBuffer m_SegmentBuffer;
 
 		extent2DType Extent2D;
 		float curX = 0;

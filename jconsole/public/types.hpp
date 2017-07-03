@@ -22,6 +22,7 @@ namespace JCON_NAMESPACE {
 
 	// FORWARDS
 	struct segment;
+	typedef void(segmentBufferIter)(JCON_NAMESPACE::segment *member);
 	class segmentBuffer;
 
 	class console;
