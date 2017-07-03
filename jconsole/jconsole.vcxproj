@@ -24,7 +24,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="public\accessor.h" />
+    <ClInclude Include="public\component.hpp" />
     <ClInclude Include="public\console.hpp" />
+    <ClInclude Include="public\defines.h" />
+    <ClInclude Include="public\segment.hpp" />
+    <ClInclude Include="public\types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Consolas.ttf" />

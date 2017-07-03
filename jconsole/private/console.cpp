@@ -127,7 +127,7 @@ void JCON_NAMESPACE::console::AppendFont(JCON_NAMESPACE::fontType font) {
 void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 	if (text.length() == 0) return;
 
-	/*unsigned int w = this->Extent2D.x;
+	unsigned int w = this->Extent2D.x;
 	unsigned int h = this->Extent2D.y;
 
 	// Adjust for scrollbar TODO
@@ -167,7 +167,7 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 			this->curX = 0;
 			this->curY += this->curLineHeight;
 
-			newSegment = this->newSegment();
+			JCON_NAMESPACE::segment* newSegmentSecond = this->newSegment();
 
 			for (auto carryOverChar : carryOver) {
 
@@ -181,7 +181,7 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 
 				this->curX += characterSize.width;
 
-				newSegment->text += carryOverChar;
+				newSegmentSecond->text += carryOverChar;
 			}
 
 		}
@@ -202,8 +202,8 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 
 		newSegment->text += character;
 
-	}*/
-
+	}
+	/*
 	sf::Text sizeTester( text, this->curFont, this->defaultValues.characterSize);
 	sf::FloatRect characterSize = sizeTester.getLocalBounds();
 
@@ -222,14 +222,15 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 	}
 
 	this->SegmentBuffer.push_back(newSegment);
-
+	*/
 }
 
-void JCON_NAMESPACE::console::HandleWindowOnResize() {
+void JCON_NAMESPACE::console::HandleWindowOnResize(sf::Event* Event) {
+	this->m_WindowContext->setView(sf::View(sf::FloatRect(0, 0, Event->size.width, Event->size.height)));
 	this->Extent2D = this->m_WindowContext->getSize();
 }
 
-JCON_NAMESPACE::segment JCON_NAMESPACE::console::newSegment() {
+JCON_NAMESPACE::segment* JCON_NAMESPACE::console::newSegment(){
 	
 	JCON_NAMESPACE::segment newSegment;
 	newSegment.x = this->curX;
@@ -239,7 +240,8 @@ JCON_NAMESPACE::segment JCON_NAMESPACE::console::newSegment() {
 	newSegment.color = this->curColor;
 	newSegment.lineHeight = this->curLineHeight;
 
-	//this->SegmentBuffer.push_back(newSegment);
+	this->SegmentBuffer.push_back(newSegment);
 
-	return newSegment;
+	//return &this->SegmentBuffer.back();
+	return &(*(this->SegmentBuffer.end()));
 }

@@ -21,6 +21,10 @@ int main() {
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			else if (event.type == sf::Event::Resized)
+				MyConsole.HandleWindowOnResize(&event);
+
 		}
 
 		window.clear();

@@ -1,60 +1,16 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+
 #include "public\accessor.h"
-#include <string>
+#include "public\types.hpp"
+#include "public\segment.hpp"
+#include "public\component.hpp"
+
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <functional>
 
-#ifndef JCON_NAMESPACE
-#define JCON_NAMESPACE jconsole
-#endif
-
-#ifndef JCON_BUFFER_SIZE
-#define JCON_BUFFER_SIZE 255
-#endif
-
-#ifndef JCON_DEFAULT_FONT
-#define JCON_DEFAULT_FONT "Consolas.ttf"
-#endif
-
-#if __cplusplus == 201703L
-#include <variant>
-#define JCON_VARIANT std::variant
-#define JCON_VARIANT_GET std::get
-#define JCON_VARIANT_INDEX(x) x.index()
-#else
-#include <boost/variant.hpp>
-#define JCON_VARIANT boost::variant
-#define JCON_VARIANT_GET boost::get
-#define JCON_VARIANT_INDEX(x) x.which()
-#endif // __cplusplus == 201703L
 
 namespace JCON_NAMESPACE {
-
-	typedef std::string textType;
-	typedef sf::Font fontType;
-	typedef sf::Color colorType;
-	typedef sf::Vector2u extent2DType;
-	
-	typedef void(ChildPaintType)(int yOffset);
-
-	enum insertType {
-		TEXT = 0,
-		FONT = 1,
-		COLOR = 2
-	};
-
-	struct segment {
-		float x;
-		float y;
-		JCON_NAMESPACE::textType text;
-		JCON_NAMESPACE::fontType font;
-		JCON_NAMESPACE::colorType color;
-		float lineHeight;
-	};
-
-	typedef JCON_VARIANT<JCON_NAMESPACE::textType, JCON_NAMESPACE::fontType, JCON_NAMESPACE::colorType> component;
-	typedef std::vector<JCON_NAMESPACE::component> componentList;
 
 	class console {
 		JCON_DEF_ACCESSORFUNC(bool, m_Rebuilding,	Rebuilding);
@@ -69,6 +25,7 @@ namespace JCON_NAMESPACE {
 		void Paint();
 
 		void setWindow(sf::RenderWindow* WindowContext);
+		void HandleWindowOnResize(sf::Event* Event);
 
 	private:
 		JCON_NAMESPACE::componentList ContentBuffer;
@@ -91,8 +48,7 @@ namespace JCON_NAMESPACE {
 		void AppendFont(JCON_NAMESPACE::fontType font);
 		void AppendText(JCON_NAMESPACE::textType text);
 
-		void HandleWindowOnResize();
-		JCON_NAMESPACE::segment newSegment();
+		JCON_NAMESPACE::segment* newSegment();
 
 	protected:
 		struct defaultValuesStruct {
