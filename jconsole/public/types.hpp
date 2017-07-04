@@ -4,8 +4,12 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <functional>
 
 namespace JCON_NAMESPACE {
+
+	typedef sf::RenderWindow windowType;
+	typedef sf::Event eventType;
 
 	typedef std::string textType;
 	typedef sf::Font fontType;
@@ -13,6 +17,7 @@ namespace JCON_NAMESPACE {
 	typedef sf::Vector2u extent2DType;
 
 	typedef void(ChildPaintType)(int yOffset);
+	typedef std::vector<std::function<JCON_NAMESPACE::ChildPaintType>> ChildBufferType;
 
 	enum insertType {
 		TEXT = 0,

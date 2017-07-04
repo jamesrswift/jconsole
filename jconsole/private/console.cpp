@@ -7,36 +7,36 @@ JCON_IMPL_ACCESSORFUNC(JCON_NAMESPACE::console, bool, m_Scrolldown, ShouldScroll
 JCON_IMPL_ACCESSORFUNC(JCON_NAMESPACE::console, int, m_SideOffset, SideOffset);
 
 JCON_NAMESPACE::console::console() {
-	this->curX = 0;
-	this->curY = 0;
-	this->vPadding = 2;
+	this->m_curX = 0;
+	this->m_curY = 0;
+	this->m_vPadding = 2;
 
 	this->setRebuilding(false);
 	this->setScrollOffset(0);
 	this->setShouldScrollDown(false);
 	this->setSideOffset(4);
 
-	this->ContentBuffer.reserve(JCON_BUFFER_SIZE);
-	this->ChildBuffer.reserve(JCON_BUFFER_SIZE);
+	this->m_ContentBuffer.reserve(JCON_BUFFER_SIZE);
+	this->m_ChildBuffer.reserve(JCON_BUFFER_SIZE);
 
 	// Below is implied in declaration
 	//this->SegmentBuffer.reserve(JCON_BUFFER_SIZE);
 	//this->m_SegmentBuffer = JCON_NAMESPACE::segmentBuffer(JCON_BUFFER_SIZE);
 
 	// Initialize default values
-	defaultValues.Font.loadFromFile(JCON_DEFAULT_FONT);
+	m_defaultValues.Font.loadFromFile(JCON_DEFAULT_FONT);
 }
 
 void JCON_NAMESPACE::console::PerformLayout() {
 	// All children will be rebuilt from content buffer
-	this->ChildBuffer.clear();
+	this->m_ChildBuffer.clear();
 
 	// Rebuild
-	this->curX = 0;
-	this->curY = 0;
+	this->m_curX = 0;
+	this->m_curY = 0;
 
-	JCON_NAMESPACE::componentList ContentBufferCopy = this->ContentBuffer;
-	this->ContentBuffer.clear();
+	JCON_NAMESPACE::componentList ContentBufferCopy = this->m_ContentBuffer;
+	this->m_ContentBuffer.clear();
 
 	this->setRebuilding(true);
 	for (JCON_NAMESPACE::component line : ContentBufferCopy) {
@@ -48,7 +48,7 @@ void JCON_NAMESPACE::console::PerformLayout() {
 
 void JCON_NAMESPACE::console::AppendLine(JCON_NAMESPACE::componentList insertion){
 	for (JCON_NAMESPACE::component val : insertion) {
-		ContentBuffer.push_back(val);
+		m_ContentBuffer.push_back(val);
 	}
 
 	this->StartInsertion();
@@ -70,9 +70,9 @@ void JCON_NAMESPACE::console::AppendLine(JCON_NAMESPACE::componentList insertion
 
 	this->EndInsertion();
 
-	if (this->ContentBuffer.size() > JCON_BUFFER_SIZE) {
-		while (this->ContentBuffer.size() > JCON_BUFFER_SIZE) {
-			this->ContentBuffer.erase(this->ContentBuffer.begin());
+	if (this->m_ContentBuffer.size() > JCON_BUFFER_SIZE) {
+		while (this->m_ContentBuffer.size() > JCON_BUFFER_SIZE) {
+			this->m_ContentBuffer.erase(this->m_ContentBuffer.begin());
 		}
 
 		this->PerformLayout();
@@ -81,20 +81,20 @@ void JCON_NAMESPACE::console::AppendLine(JCON_NAMESPACE::componentList insertion
 
 void JCON_NAMESPACE::console::Paint() {
 
-	for (std::function<JCON_NAMESPACE::ChildPaintType> child : this->ChildBuffer) {
+	for (std::function<JCON_NAMESPACE::ChildPaintType> child : this->m_ChildBuffer) {
 		child(this->getScrollOffset());
 	}
 }
 
-void JCON_NAMESPACE::console::setWindow(sf::RenderWindow* WindowContext) {
+void JCON_NAMESPACE::console::setWindow(JCON_NAMESPACE::windowType* WindowContext) {
 	this->m_WindowContext = WindowContext;
-	this->Extent2D = this->m_WindowContext->getSize();
+	this->m_Extent2D = this->m_WindowContext->getSize();
 }
 
 void JCON_NAMESPACE::console::StartInsertion() {
-	this->curFont = this->defaultValues.Font;
-	this->curColor = this->defaultValues.Color;
-	this->curLineHeight = 0;
+	this->m_curFont = this->m_defaultValues.Font;
+	this->m_curColor = this->m_defaultValues.Color;
+	this->m_curLineHeight = 0;
 
 	this->setShouldScrollDown( /*this->ScrollBar->AtBottom() or*/ this->getRebuilding());
 	this->m_SegmentBuffer.clear();
@@ -104,14 +104,13 @@ void JCON_NAMESPACE::console::EndInsertion() {
 
 	int side_x_offset = this->getSideOffset();
 
-	/*for (JCON_NAMESPACE::segment segment : this->SegmentBuffer) {*/
-
+	// Iterate through all segments
 	this->m_SegmentBuffer.Iterate([=](JCON_NAMESPACE::segment* segment){
 
 		// Paint function
-		this->ChildBuffer.push_back([=](int yOffset){
+		this->m_ChildBuffer.push_back([=](int yOffset){
 
-			sf::Text text(segment->text, segment->font, this->defaultValues.characterSize);
+			sf::Text text(segment->text, segment->font, this->m_defaultValues.characterSize);
 			text.setFillColor(segment->color);
 			text.setPosition(segment->x + side_x_offset, segment->y + yOffset);
 			this->m_WindowContext->draw(text);
@@ -122,11 +121,11 @@ void JCON_NAMESPACE::console::EndInsertion() {
 }
 
 void JCON_NAMESPACE::console::AppendColor(JCON_NAMESPACE::colorType color) {
-	this->curColor = color;
+	this->m_curColor = color;
 }
 
 void JCON_NAMESPACE::console::AppendFont(JCON_NAMESPACE::fontType font) {
-	this->curFont = font;
+	this->m_curFont = font;
 }
 
 void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
@@ -210,46 +209,49 @@ void JCON_NAMESPACE::console::AppendText(JCON_NAMESPACE::textType text) {
 
 	}
 	*/
-	sf::Text sizeTester( text, this->curFont, this->defaultValues.characterSize);
+	sf::Text sizeTester( text, this->m_curFont, this->m_defaultValues.characterSize);
 	sf::FloatRect characterSize = sizeTester.getLocalBounds();
 
-	if (characterSize.height > this->curLineHeight) {
-		this->curLineHeight = characterSize.height;
+	if (characterSize.height > this->m_curLineHeight) {
+		this->m_curLineHeight = characterSize.height;
 	}
 
 	JCON_NAMESPACE::segment* newSegment = this->newSegment();
 	newSegment->text = text;
 
-	this->curX += characterSize.width;
+	this->m_curX += characterSize.width;
 
-	if (this->curX > this->Extent2D.x) {
-		this->curX = 0;
-		this->curY += this->curLineHeight;
+	if (this->m_curX > this->m_Extent2D.x) {
+		this->m_curX = 0;
+		this->m_curY += this->m_curLineHeight;
 	}
-
-	//this->SegmentBufferpush_back(newSegment);
 	
 }
 
 void JCON_NAMESPACE::console::HandleWindowOnResize(sf::Event* Event) {
-	this->m_WindowContext->setView(sf::View(sf::FloatRect(0, 0, Event->size.width, Event->size.height)));
-	this->Extent2D = this->m_WindowContext->getSize();
+	this->m_WindowContext->setView(
+		sf::View(
+			sf::FloatRect(
+				0, // X
+				0, // Y
+				(float)Event->size.width, // WIDTH
+				(float)Event->size.height // HEIGHT
+			)
+		)
+	);
+
+	this->m_Extent2D = this->m_WindowContext->getSize();
 }
 
 JCON_NAMESPACE::segment* JCON_NAMESPACE::console::newSegment(){
 	
 	JCON_NAMESPACE::segment newSegment;
-	newSegment.x = this->curX;
-	newSegment.y = this->curY;
+	newSegment.x = this->m_curX;
+	newSegment.y = this->m_curY;
 	newSegment.text = "";
-	newSegment.font = this->curFont;
-	newSegment.color = this->curColor;
-	newSegment.lineHeight = this->curLineHeight;
-
-	//this->SegmentBuffer.push_back(newSegment);
-
-	//return &this->SegmentBuffer.back();
-	//return &(*(this->m_SegmentBuffer.end()));
+	newSegment.font = this->m_curFont;
+	newSegment.color = this->m_curColor;
+	newSegment.lineHeight = this->m_curLineHeight;
 
 	return this->m_SegmentBuffer.push_back(newSegment);
 }

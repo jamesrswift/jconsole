@@ -5,11 +5,6 @@
 #include "public\segment.hpp"
 #include "public\component.hpp"
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <functional>
-
-
 namespace JCON_NAMESPACE {
 
 	class console {
@@ -24,23 +19,22 @@ namespace JCON_NAMESPACE {
 		void AppendLine(componentList insertion);
 		void Paint();
 
-		void setWindow(sf::RenderWindow* WindowContext);
+		void setWindow(JCON_NAMESPACE::windowType* WindowContext);
 		void HandleWindowOnResize(sf::Event* Event);
 
 	private:
-		JCON_NAMESPACE::componentList ContentBuffer;
-		std::vector<std::function<ChildPaintType>> ChildBuffer;
-		//std::vector<JCON_NAMESPACE::segment> SegmentBuffer;
+		JCON_NAMESPACE::componentList m_ContentBuffer;
+		JCON_NAMESPACE::ChildBufferType m_ChildBuffer;
 		JCON_NAMESPACE::segmentBuffer m_SegmentBuffer;
 
-		extent2DType Extent2D;
-		float curX = 0;
-		float curY = 0;
-		float vPadding = 2;
+		JCON_NAMESPACE::extent2DType m_Extent2D;
+		float m_curX = 0;
+		float m_curY = 0;
+		float m_vPadding = 2;
 
-		JCON_NAMESPACE::fontType curFont;
-		JCON_NAMESPACE::colorType curColor;
-		float curLineHeight;
+		JCON_NAMESPACE::fontType m_curFont;
+		JCON_NAMESPACE::colorType m_curColor;
+		float m_curLineHeight;
 
 		void StartInsertion();
 		void EndInsertion();
@@ -56,9 +50,9 @@ namespace JCON_NAMESPACE {
 			sf::Font Font;
 			sf::Color Color = sf::Color::White;
 			int characterSize = 14;
-		} defaultValues;
+		} m_defaultValues;
 
-		sf::RenderWindow* m_WindowContext;
+		JCON_NAMESPACE::windowType* m_WindowContext;
 
 	};
 
