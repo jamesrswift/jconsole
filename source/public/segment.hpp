@@ -10,7 +10,7 @@
 
 namespace JCON_NAMESPACE {
 
-	struct JCON_API segment {
+	struct segment {
 		float x;
 		float y;
 		JCON_NAMESPACE::textType text;
@@ -19,7 +19,7 @@ namespace JCON_NAMESPACE {
 		float lineHeight;
 	};
 
-	class JCON_API segmentBuffer {
+	class segmentBuffer {
 	private:
 		JCON_NAMESPACE::segment* m_Buffer;
 		size_t m_BufferSize;

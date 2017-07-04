@@ -255,3 +255,7 @@ JCON_NAMESPACE::segment* JCON_NAMESPACE::console::newSegment(){
 
 	return this->m_SegmentBuffer.push_back(newSegment);
 }
+
+JCON_API JCON_NAMESPACE::console* JCON_NAMESPACE::consoleFactory() {
+	return new JCON_NAMESPACE::console();
+}

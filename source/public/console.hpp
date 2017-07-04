@@ -8,7 +8,7 @@
 
 namespace JCON_NAMESPACE {
 
-	class JCON_API console {
+	class console {
 		JCON_DEF_ACCESSORFUNC(bool, m_Rebuilding,	Rebuilding);
 		JCON_DEF_ACCESSORFUNC(int, m_ScrollOffset, ScrollOffset);
 		JCON_DEF_ACCESSORFUNC(bool,	m_Scrolldown,	ShouldScrollDown);
@@ -56,5 +56,7 @@ namespace JCON_NAMESPACE {
 		JCON_NAMESPACE::windowType* m_WindowContext;
 
 	};
+
+	extern "C" JCON_API console* consoleFactory();
 
 }

@@ -1,11 +1,12 @@
 -- jConsole premake
 
-local function boilerplate( )
+local function boilerplate( DLL )
 
 	includedirs "source"
 	
-	defines { "SFML_STATIC" }
+	--defines { "SFML_STATIC" }
 
+if ( DLL ) then
 	links {	
 		"opengl32.lib",
 		"freetype.lib",
@@ -13,6 +14,7 @@ local function boilerplate( )
 		"winmm.lib",
 		"gdi32.lib"
 	}
+end
 	
 	includedirs "dependencies/variant"
   
@@ -31,22 +33,26 @@ local function boilerplate( )
 		defines { "WIN64" }
 		
 	filter "configurations:Debug"
+
 		links
 		{ 	
-			"sfml-graphics-s-d.lib",
-			"sfml-window-s-d.lib",
-			"sfml-system-s-d.lib",
+			"sfml-graphics-d.lib",
+			"sfml-window-d.lib",
+			"sfml-system-d.lib",
 		}
+
 		defines { "DEBUG" }
 		symbols "On"
 	
 	filter "configurations:Release"
+
 		links
 		{ 	
-			"sfml-graphics-s.lib",
-			"sfml-window-s.lib",
-			"sfml-system-s.lib",
+			"sfml-graphics.lib",
+			"sfml-window.lib",
+			"sfml-system.lib",
 		}
+
 		defines { "RELEASE" }
 		optimize "On"
 		
@@ -63,26 +69,25 @@ project "jconsole"
 	location "build/jconsole"
 	kind "SharedLib"
 	language "C++"
-	targetdir "bin/jconsole/%{cfg.buildcfg}"
+	targetdir "bin/%{cfg.buildcfg}"
 	
 	defines { "JCON_EXPORTS" }
 	files {"source/**.cpp", "source/**.hpp", "source/**.h"}
-	files {"resources/fonts/consolas.ttf"}
-	boilerplate( )
+	
+	boilerplate( true )
+	
 	
 project "example"
 	location "build/example"
 	kind "ConsoleApp"
 	dependson "jconsole"
 	language "C++"
-	targetdir "bin/example/%{cfg.buildcfg}"
+	targetdir "bin/%{cfg.buildcfg}"
 	
-	defines { "JCON_EXPORTS" }
-	files {"source/**.cpp", "source/**.hpp", "source/**.h"}
 	files {"example/main.cpp"}
-	files {"resources/fonts/consolas.ttf"}
 	
-	--libdirs "bin/jconsole/%{cfg.buildcfg}"
-	--links{ "jconsole.lib" }
-	boilerplate( )
+	libdirs "bin/%{cfg.buildcfg}"
+	links{ "jconsole.lib" }
+	
+	boilerplate( false )
 	

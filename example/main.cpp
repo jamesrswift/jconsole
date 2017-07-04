@@ -6,10 +6,10 @@ int main() {
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "JConsole");
 
-	JCON_NAMESPACE::console MyConsole;
-	MyConsole.setWindow(&window);
+	JCON_NAMESPACE::console* MyConsole = JCON_NAMESPACE::consoleFactory();
+	MyConsole->setWindow(&window);
 
-	MyConsole.AppendLine({ "Welcome to the console!" });
+	MyConsole->AppendLine({ "Welcome to the console!" });
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -23,12 +23,14 @@ int main() {
 				window.close();
 
 			else if (event.type == sf::Event::Resized)
-				MyConsole.HandleWindowOnResize(&event);
+				MyConsole->HandleWindowOnResize(&event);
 
 		}
 
 		window.clear();
-		MyConsole.Paint();
+		MyConsole->Paint();
 		window.display();
 	}
+
+	delete MyConsole;
 }
