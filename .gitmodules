@@ -1,3 +1,9 @@
 [submodule "dependencies/variant"]
 	path = dependencies/variant
 	url = https://github.com/steinwurf/boost
+[submodule "dependencies/x64/SFML"]
+	path = dependencies/x64/SFML
+	url = https://github.com/JamesxX/SFML-x64
+[submodule "dependencies/x86/SFML"]
+	path = dependencies/x86/SFML
+	url = https://github.com/JamesxX/SFML-x86
