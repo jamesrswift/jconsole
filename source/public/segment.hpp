@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning( disable : 4251 )  // all members having no dll-interface are private, SEE JCON_NAMESPACE::segment and fix!
 #include "public\types.hpp"
 
 #include <functional>
@@ -10,7 +10,7 @@
 
 namespace JCON_NAMESPACE {
 
-	struct segment {
+	struct JCON_API segment {
 		float x;
 		float y;
 		JCON_NAMESPACE::textType text;
@@ -19,7 +19,7 @@ namespace JCON_NAMESPACE {
 		float lineHeight;
 	};
 
-	class segmentBuffer {
+	class JCON_API segmentBuffer {
 	private:
 		JCON_NAMESPACE::segment* m_Buffer;
 		size_t m_BufferSize;

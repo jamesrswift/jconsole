@@ -19,17 +19,17 @@ namespace JCON_NAMESPACE {
 	typedef void(ChildPaintType)(int yOffset);
 	typedef std::vector<std::function<JCON_NAMESPACE::ChildPaintType>> ChildBufferType;
 
-	enum insertType {
+	enum JCON_API insertType {
 		TEXT = 0,
 		FONT = 1,
 		COLOR = 2
 	};
 
 	// FORWARDS
-	struct segment;
+	struct JCON_API segment;
 	typedef void(segmentBufferIter)(JCON_NAMESPACE::segment *member);
-	class segmentBuffer;
+	class JCON_API segmentBuffer;
 
-	class console;
+	class JCON_API console;
 
 }

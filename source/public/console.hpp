@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable : 4251 )  // all members having no dll-interface are private
 
 #include "public\accessor.h"
 #include "public\types.hpp"
@@ -7,7 +8,7 @@
 
 namespace JCON_NAMESPACE {
 
-	class console {
+	class JCON_API console {
 		JCON_DEF_ACCESSORFUNC(bool, m_Rebuilding,	Rebuilding);
 		JCON_DEF_ACCESSORFUNC(int, m_ScrollOffset, ScrollOffset);
 		JCON_DEF_ACCESSORFUNC(bool,	m_Scrolldown,	ShouldScrollDown);
