@@ -1,0 +1,3 @@
+[submodule "jconsole/deps/variant"]
+	path = jconsole/deps/variant
+	url = https://github.com/boostorg/variant
